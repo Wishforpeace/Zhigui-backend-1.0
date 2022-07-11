@@ -1,0 +1,1207 @@
+basePath: /api/v1
+definitions:
+  Response:
+    properties:
+      code:
+        type: integer
+      data: {}
+      error: {}
+      message: {}
+    type: object
+  auth.CreateUserRequest:
+    properties:
+      degree:
+        type: string
+      email:
+        type: string
+      gender:
+        type: string
+      nickname:
+        type: string
+      password:
+        type: string
+      password_again:
+        type: string
+      phone_num:
+        type: string
+    required:
+    - degree
+    - email
+    - gender
+    - nickname
+    - password
+    - password_again
+    - phone_num
+    type: object
+  auth.LoginRequest:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    required:
+    - email
+    - password
+    type: object
+  errno.Errno:
+    properties:
+      code:
+        type: integer
+      message:
+        type: string
+    type: object
+  forum.CommentRequest:
+    properties:
+      content:
+        type: string
+      postID:
+        type: integer
+    type: object
+  forum.ForumRequest:
+    properties:
+      content:
+        type: string
+    required:
+    - content
+    type: object
+  model.Confirm:
+    properties:
+      accepter:
+        type: string
+      createdAt:
+        type: string
+      deletedAt:
+        type: string
+      id:
+        type: integer
+      publisher:
+        type: string
+      taskID:
+        type: integer
+      updatedAt:
+        type: string
+    type: object
+  model.Task:
+    properties:
+      accepter:
+        type: string
+      award:
+        type: integer
+      confirm:
+        $ref: '#/definitions/model.Confirm'
+      content:
+        type: string
+      createdAt:
+        type: string
+      deletedAt:
+        type: string
+      id:
+        type: integer
+      image:
+        items:
+          $ref: '#/definitions/model.TaskImage'
+        type: array
+      prefecture_id:
+        type: string
+      publisher:
+        type: string
+      status:
+        type: string
+      tag:
+        type: string
+      updatedAt:
+        type: string
+      willing:
+        items:
+          $ref: '#/definitions/model.Willing'
+        type: array
+      willing_num:
+        type: integer
+    type: object
+  model.TaskImage:
+    properties:
+      createdAt:
+        type: string
+      deletedAt:
+        type: string
+      id:
+        type: integer
+      path:
+        type: string
+      sha:
+        type: string
+      taskID:
+        type: integer
+      updatedAt:
+        type: string
+      url:
+        type: string
+    type: object
+  model.Willing:
+    properties:
+      createdAt:
+        type: string
+      deletedAt:
+        type: string
+      email:
+        type: string
+      id:
+        type: integer
+      taskID:
+        type: integer
+      updatedAt:
+        type: string
+    type: object
+  task.TaskRequest:
+    properties:
+      award:
+        type: integer
+      content:
+        type: string
+      prefecture_id:
+        type: string
+      tag_id:
+        type: string
+    required:
+    - award
+    - content
+    - prefecture_id
+    - tag_id
+    type: object
+  task.UpdateRequest:
+    properties:
+      award:
+        type: integer
+      content:
+        type: string
+      id:
+        type: string
+      prefecture_id:
+        type: string
+      tag_id:
+        type: string
+    type: object
+  user.InfoResponse:
+    properties:
+      avatar:
+        type: string
+      degree:
+        type: string
+      doing:
+        type: integer
+      done:
+        type: integer
+      earning:
+        type: string
+      email:
+        type: string
+      gender:
+        type: string
+      nick_name:
+        type: string
+      phone_num:
+        type: string
+    type: object
+  user.UpdateInfoRequest:
+    properties:
+      degree:
+        type: string
+      nick_name:
+        type: string
+      old_password:
+        type: string
+      password:
+        type: string
+      phone_num:
+        type: string
+    type: object
+host: 119.3.2.168:2333
+info:
+  contact:
+    email: 1903180340@qq.com
+    name: Wishiforpeace
+  description: 纸贵API
+  termsOfService: http://swagger.io/terrms/
+  title: Zhigui API
+  version: 1.0.0
+paths:
+  /auth/login:
+    post:
+      consumes:
+      - application/json
+      description: 邮箱登录
+      parameters:
+      - description: 注册用户信息
+        in: body
+        name: object
+        required: true
+        schema:
+          $ref: '#/definitions/auth.LoginRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"msg":"将student_id作为token保留"}'
+          schema:
+            $ref: '#/definitions/Response'
+        "400":
+          description: '{"error_code":"20001", "message":"Fail."} or {"error_code":"00002",
+            "message":"Lack Param Or Param Not Satisfiable."}'
+          schema:
+            $ref: '#/definitions/errno.Errno'
+        "401":
+          description: '{"error_code":"10001", "message":"The email address has been
+            registered"} '
+          schema:
+            $ref: '#/definitions/errno.Errno'
+        "500":
+          description: '{"error_code":"30001", "message":"Fail."} 失败'
+          schema:
+            $ref: '#/definitions/errno.Errno'
+      summary: Login
+      tags:
+      - auth
+  /auth/register:
+    post:
+      consumes:
+      - application/json
+      description: 邮箱注册登录
+      parameters:
+      - description: 注册用户信息
+        in: body
+        name: object
+        required: true
+        schema:
+          $ref: '#/definitions/auth.CreateUserRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"msg":"将student_id作为token保留"}'
+          schema:
+            $ref: '#/definitions/Response'
+        "400":
+          description: '{"error_code":"20001", "message":"Fail."} or {"error_code":"00002",
+            "message":"Lack Param Or Param Not Satisfiable."}'
+          schema:
+            $ref: '#/definitions/errno.Errno'
+        "401":
+          description: '{"error_code":"10001", "message":"The email address has been
+            registered"} '
+          schema:
+            $ref: '#/definitions/errno.Errno'
+        "500":
+          description: '{"error_code":"30001", "message":"Fail."} 失败'
+          schema:
+            $ref: '#/definitions/errno.Errno'
+      summary: Register
+      tags:
+      - auth
+  /forum:
+    get:
+      consumes:
+      - json/application
+      description: 分页查看全部帖子
+      parameters:
+      - description: 获取email
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: 'limit--偏移量指定开始返回记录之前要跳过的记录数 '
+        in: query
+        name: limit
+        required: true
+        type: integer
+      - description: 'page--限制指定要检索的记录数 '
+        in: query
+        name: page
+        required: true
+        type: integer
+      produces:
+      - json/application
+      responses:
+        "200":
+          description: '{"code":0,"message":"OK","data":{}}'
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/errno.Errno'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/errno.Errno'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/errno.Errno'
+      summary: 查看帖子
+      tags:
+      - forum
+  /forum/comments:
+    get:
+      consumes:
+      - json/application
+      description: 查看已发布帖子的评论内容
+      parameters:
+      - description: 获取email
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: id--帖子的id
+        in: query
+        name: id
+        required: true
+        type: integer
+      - description: 'limit--偏移量指定开始返回记录之前要跳过的记录数 '
+        in: query
+        name: limit
+        required: true
+        type: integer
+      - description: 'page--限制指定要检索的记录数 '
+        in: query
+        name: page
+        required: true
+        type: integer
+      produces:
+      - json/application
+      responses:
+        "200":
+          description: '{"code":0,"message":"OK","data":{}}'
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/errno.Errno'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/errno.Errno'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/errno.Errno'
+      summary: 获取某帖子评论
+      tags:
+      - forum
+    post:
+      consumes:
+      - json/application
+      description: 用户根据需要发布帖子
+      parameters:
+      - description: 获取email
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: id--任务的id
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/forum.CommentRequest'
+      produces:
+      - json/application
+      responses:
+        "200":
+          description: '{"code":0,"message":"OK","data":{}}'
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/errno.Errno'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/errno.Errno'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/errno.Errno'
+      summary: 发布帖子
+      tags:
+      - forum
+  /forum/like:
+    post:
+      consumes:
+      - json/application
+      description: 查看已发布帖子的评论内容
+      parameters:
+      - description: 获取email
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: 帖子的id
+        in: formData
+        name: id
+        required: true
+        type: integer
+      produces:
+      - json/application
+      responses:
+        "200":
+          description: '{"code":0,"message":"OK","data":{}}'
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/errno.Errno'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/errno.Errno'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/errno.Errno'
+      summary: 获取某帖子评论
+      tags:
+      - forum
+  /forum/personal/personals:
+    get:
+      consumes:
+      - json/application
+      description: 用户发布过的帖子
+      parameters:
+      - description: 获取email
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: 'limit--偏移量指定开始返回记录之前要跳过的记录数 '
+        in: query
+        name: limit
+        required: true
+        type: integer
+      - description: 'page--限制指定要检索的记录数 '
+        in: query
+        name: page
+        required: true
+        type: integer
+      produces:
+      - json/application
+      responses:
+        "200":
+          description: '{"code":0,"message":"OK","data":{}}'
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/errno.Errno'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/errno.Errno'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/errno.Errno'
+      summary: 获取用户发布的帖子
+      tags:
+      - task
+  /forum/publish:
+    post:
+      consumes:
+      - json/application
+      description: 用户根据需要发布帖子
+      parameters:
+      - description: 获取email
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: id--任务的id
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/forum.ForumRequest'
+      produces:
+      - json/application
+      responses:
+        "200":
+          description: '{"code":0,"message":"OK","data":{}}'
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/errno.Errno'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/errno.Errno'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/errno.Errno'
+      summary: 发布帖子
+      tags:
+      - forum
+  /forum/publish/pictures:
+    post:
+      consumes:
+      - json/application
+      description: 上传新的图片
+      parameters:
+      - description: 获取email
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: id--帖子的id
+        in: formData
+        name: id
+        required: true
+        type: string
+      - description: 文件
+        in: formData
+        name: file
+        required: true
+        type: file
+      produces:
+      - json/application
+      responses:
+        "200":
+          description: '{"code":0,"message":"OK","data":{}}'
+          schema:
+            items:
+              $ref: '#/definitions/model.Task'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/errno.Errno'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/errno.Errno'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/errno.Errno'
+      summary: 上传帖子图片
+      tags:
+      - forum
+  /tasks/accept:
+    post:
+      consumes:
+      - json/application
+      description: 接受他人发布的
+      parameters:
+      - description: 获取email
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: id--任务的id
+        in: formData
+        name: task_id
+        required: true
+        type: string
+      produces:
+      - json/application
+      responses:
+        "200":
+          description: '{"code":0,"message":"OK","data":{}}'
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/errno.Errno'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/errno.Errno'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/errno.Errno'
+      summary: 接受任务
+      tags:
+      - task
+  /tasks/confirm:
+    post:
+      consumes:
+      - json/application
+      description: 确认任务已完成
+      parameters:
+      - description: 获取email
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: id--任务的id
+        in: formData
+        name: id
+        required: true
+        type: string
+      produces:
+      - json/application
+      responses:
+        "200":
+          description: '{"code":0,"message":"OK","data":{}}'
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/errno.Errno'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/errno.Errno'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/errno.Errno'
+      summary: 确认任务
+      tags:
+      - task
+  /tasks/delete/:id:
+    delete:
+      consumes:
+      - json/application
+      description: 删除用户发布的任务
+      parameters:
+      - description: 获取email
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: id--任务的id
+        in: query
+        name: id
+        required: true
+        type: string
+      produces:
+      - json/application
+      responses:
+        "200":
+          description: '{"code":0,"message":"OK","data":{}}'
+          schema:
+            $ref: '#/definitions/model.Task'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/errno.Errno'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/errno.Errno'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/errno.Errno'
+      summary: 删除任务
+      tags:
+      - task
+  /tasks/details:
+    get:
+      consumes:
+      - json/application
+      description: 查看每一个任务的具体内容
+      parameters:
+      - description: 获取email
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: id--任务的id
+        in: query
+        name: id
+        required: true
+        type: string
+      produces:
+      - json/application
+      responses:
+        "200":
+          description: '{"code":0,"message":"OK","data":{}}'
+          schema:
+            items:
+              $ref: '#/definitions/model.Task'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/errno.Errno'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/errno.Errno'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/errno.Errno'
+      summary: 查看某任务具体内容
+      tags:
+      - task
+    post:
+      consumes:
+      - json/application
+      description: 修改具体任务内容
+      parameters:
+      - description: 获取email
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: id--任务的id
+        in: body
+        name: object
+        required: true
+        schema:
+          $ref: '#/definitions/task.UpdateRequest'
+      produces:
+      - json/application
+      responses:
+        "200":
+          description: '{"code":0,"message":"OK","data":{}}'
+          schema:
+            items:
+              $ref: '#/definitions/model.Task'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/errno.Errno'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/errno.Errno'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/errno.Errno'
+      summary: 修改任务
+      tags:
+      - task
+  /tasks/payment:
+    post:
+      consumes:
+      - json/application
+      description: 订单完成后，用户向接受者支付
+      parameters:
+      - description: 获取email
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: id--任务的id
+        in: formData
+        name: id
+        required: true
+        type: string
+      produces:
+      - json/application
+      responses:
+        "200":
+          description: '{"code":0,"message":"OK","data":{}}'
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/errno.Errno'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/errno.Errno'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/errno.Errno'
+      summary: 支付订单
+      tags:
+      - task
+  /tasks/personal:
+    get:
+      consumes:
+      - application/json
+      description: 查看发布与接受的任务
+      parameters:
+      - description: token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: task:0---查看发布的任务；task:1---查看接受的任务
+        in: query
+        name: task
+        required: true
+        type: integer
+      - description: 'limit--偏移量指定开始返回记录之前要跳过的记录数 '
+        in: query
+        name: limit
+        required: true
+        type: integer
+      - description: page--限制指定要检索的记录数
+        in: query
+        name: page
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"msg":"查看成功"}'
+          schema:
+            items:
+              $ref: '#/definitions/model.Task'
+            type: array
+        "500":
+          description: '{"msg":"Error occurred while getting url queries."}'
+          schema:
+            $ref: '#/definitions/errno.Errno'
+      summary: 查看用户的发送接受的全部任务
+      tags:
+      - task
+  /tasks/pictures:
+    delete:
+      consumes:
+      - json/application
+      description: 删除已经任务图片
+      parameters:
+      - description: 获取email
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: id--图片的id
+        in: query
+        name: id
+        required: true
+        type: integer
+      produces:
+      - json/application
+      responses:
+        "200":
+          description: '{"code":0,"message":"OK","data":{}}'
+          schema:
+            $ref: '#/definitions/model.Task'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/errno.Errno'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/errno.Errno'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/errno.Errno'
+      summary: 删除图片
+      tags:
+      - task
+  /tasks/prefecture:
+    get:
+      consumes:
+      - application/json
+      description: 查看分区的任务
+      parameters:
+      - description: token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: 0:数理专区；1：英语专区；2：专业课专区；3：竞赛专区；4：体育专区；5：游戏专区；6：赏乐专区；7：吃喝专区
+        in: query
+        name: prefecture
+        required: true
+        type: integer
+      - description: 'limit--偏移量指定开始返回记录之前要跳过的记录数 '
+        in: query
+        name: limit
+        required: true
+        type: integer
+      - description: 'page--限制指定要检索的记录数 '
+        in: query
+        name: page
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"msg":"查看成功"}'
+          schema:
+            items:
+              $ref: '#/definitions/model.Task'
+            type: array
+        "500":
+          description: '{"msg":"Error occurred while getting url queries."}'
+          schema:
+            $ref: '#/definitions/errno.Errno'
+      summary: 获取专区的任务
+      tags:
+      - task
+  /tasks/publish:
+    post:
+      consumes:
+      - json/application
+      description: 发布具体任务内容
+      parameters:
+      - description: 获取email
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: id--任务的id
+        in: body
+        name: task
+        required: true
+        schema:
+          $ref: '#/definitions/task.TaskRequest'
+      produces:
+      - json/application
+      responses:
+        "200":
+          description: '{"code":0,"message":"OK","data":{}}'
+          schema:
+            items:
+              $ref: '#/definitions/model.Task'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/errno.Errno'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/errno.Errno'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/errno.Errno'
+      summary: 发布任务
+      tags:
+      - task
+  /tasks/publish/picture:
+    post:
+      consumes:
+      - json/application
+      description: 上传新的图片
+      parameters:
+      - description: 获取email
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: id--任务的id
+        in: formData
+        name: id
+        required: true
+        type: string
+      - description: 文件
+        in: formData
+        name: file
+        required: true
+        type: file
+      produces:
+      - json/application
+      responses:
+        "200":
+          description: '{"code":0,"message":"OK","data":{}}'
+          schema:
+            items:
+              $ref: '#/definitions/model.Task'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/errno.Errno'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/errno.Errno'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/errno.Errno'
+      summary: 上传或修改任务图片
+      tags:
+      - task
+  /tasks/select:
+    post:
+      consumes:
+      - json/application
+      description: 接受他人发布的
+      parameters:
+      - description: 获取email
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: 有意愿者的email
+        in: formData
+        name: email
+        required: true
+        type: string
+      - description: 任务id
+        in: formData
+        name: id
+        required: true
+        type: string
+      produces:
+      - json/application
+      responses:
+        "200":
+          description: '{"code":0,"message":"OK","data":{}}'
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/errno.Errno'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/errno.Errno'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/errno.Errno'
+      summary: 选择任务接受者
+      tags:
+      - task
+  /user/avatar:
+    post:
+      consumes:
+      - application/json
+      description: 修改用户头像
+      parameters:
+      - description: token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: 文件
+        in: formData
+        name: file
+        required: true
+        type: file
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"message":"上传成功","data":map[string]interface{"url","path","sha"}}'
+          schema:
+            type: string
+        "400":
+          description: 上传失败,请检查token与其他配置参数是否正确
+          schema:
+            $ref: '#/definitions/errno.Errno'
+      summary: 修改头像
+      tags:
+      - user
+  /user/info:
+    get:
+      consumes:
+      - application/json
+      description: 得到用户所有的个人信息
+      parameters:
+      - description: token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code":0,"message":"OK","data":{"username":"kong"}}'
+          schema:
+            $ref: '#/definitions/user.InfoResponse'
+      summary: 得到用户信息
+      tags:
+      - user
+    post:
+      consumes:
+      - application/json
+      description: 修改用户所有的个人信息
+      parameters:
+      - description: 需要修改对内容
+        in: body
+        name: req
+        required: true
+        schema:
+          $ref: '#/definitions/user.UpdateInfoRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"NickName":"新名字","Degree":"新学历"}'
+          schema:
+            type: string
+      summary: 修改用户信息
+      tags:
+      - user
+  /user/others:
+    get:
+      consumes:
+      - application/json
+      description: 得到其他用户的个人信息
+      parameters:
+      - description: token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: 用户邮箱
+        in: formData
+        name: email
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code":0,"message":"OK","data":{"username":"kong"}}'
+          schema:
+            $ref: '#/definitions/user.InfoResponse'
+      summary: 查看其他用户信息
+      tags:
+      - user
+  /user/payment:
+    post:
+      consumes:
+      - application/json
+      description: 修改用户收款码
+      parameters:
+      - description: token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: 文件
+        in: formData
+        name: file
+        required: true
+        type: file
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"message":"上传成功","data":map[string]interface{"url","path","sha"}}'
+          schema:
+            type: string
+        "400":
+          description: 上传失败,请检查token与其他配置参数是否正确
+          schema:
+            $ref: '#/definitions/errno.Errno'
+      summary: 上传收款码
+      tags:
+      - user
+schemes:
+- http
+swagger: "2.0"
